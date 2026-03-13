@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAP.EXE — Download The Drip</title>
+  <meta name="description"
+    content="CAP.EXE — Custom streetwear caps from the forgotten internet era. Not a hat. A file. EST. 2003.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ====== CURSOR SPARKLE CANVAS ====== -->
+  <canvas id="sparkle-canvas"></canvas>
+
+  <!-- ====== BOOT SCREEN ====== -->
+  <div id="boot-screen">
+    <div class="boot-content">
+      <div class="boot-logo">
+        <div class="boot-logo-text">CAP<span class="dot-exe">.EXE</span></div>
+        <div class="boot-tagline">CUSTOM STREET CAPS // EST. 2003</div>
+      </div>
+      <div class="boot-lines">
+        <div class="boot-line" id="bl1">INITIALIZING CAP.EXE...</div>
+        <div class="boot-line hidden" id="bl2">LOADING STREET PROTOCOL v2.3</div>
+        <div class="boot-line hidden" id="bl3">SCANNING DRIP ARCHIVE...</div>
+        <div class="boot-line hidden" id="bl4">DETECTING RARE INVENTORY...</div>
+        <div class="boot-line hidden" id="bl5">SYSTEM READY. INSTALLING DRIP.</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progress-bar"></div>
+        <div class="progress-text" id="progress-text">0%</div>
+      </div>
+      <div class="boot-hint">press any key to continue</div>
+    </div>
+    <div class="scanlines"></div>
+    <div class="boot-crt-flicker"></div>
+  </div>
+
+  <!-- ====== DESKTOP ====== -->
+  <div id="desktop" class="hidden">
+
+    <!-- Starfield Canvas -->
+    <canvas id="starfield-canvas"></canvas>
+
+    <!-- Desktop Icons -->
+    <div id="desktop-icons">
+      <div class="desktop-icon" id="icon-shop" onclick="openWindow('shop')">
+        <div class="icon-img">🧢</div>
+        <div class="icon-label">SHOP.EXE</div>
+      </div>
+      <div class="desktop-icon" id="icon-lookbook" onclick="openWindow('lookbook')">
+        <div class="icon-img">📸</div>
+        <div class="icon-label">LOOKBOOK.EXE</div>
+      </div>
+      <div class="desktop-icon" id="icon-custom" onclick="openWindow('custom')">
+        <div class="icon-img">✏️</div>
+        <div class="icon-label">CUSTOM.EXE</div>
+      </div>
+      <div class="desktop-icon" id="icon-contact" onclick="openWindow('contact')">
+        <div class="icon-img">💬</div>
+        <div class="icon-label">CONTACT.EXE</div>
+      </div>
+      <div class="desktop-icon" id="icon-cart" onclick="openWindow('cart')">
+        <div class="icon-img">🛒</div>
+        <div class="icon-label">CART.EXE</div>
+      </div>
+      <div class="desktop-icon" id="icon-story" onclick="openWindow('story')">
+        <div class="icon-img">📖</div>
+        <div class="icon-label">STORY.EXE</div>
+      </div>
+      <div class="desktop-icon" id="icon-game" onclick="openWindow('game')">
+        <div class="icon-img">🎮</div>
+        <div class="icon-label">GAME.EXE</div>
+      </div>
+    </div>
+
+    <!-- ====== WINDOWS ====== -->
+
+    <!-- SHOP WINDOW -->
+    <div class="win" id="win-shop" style="top:80px; left:60px; width:700px; height:520px;">
+      <div class="win-titlebar" data-window="shop">
+        <div class="win-title"><span class="win-title-icon">🧢</span> SHOP.EXE — CAP ARCHIVE</div>
+        <div class="win-controls">
+          <button class="win-btn win-min" onclick="minimizeWindow('shop')">─</button>
+          <button class="win-btn win-max" onclick="maximizeWindow('shop')">□</button>
+          <button class="win-btn win-close" onclick="closeWindow('shop')">✕</button>
+        </div>
+      </div>
+      <div class="win-menubar">
+        <span>File</span><span>View</span><span>Sort</span><span>Help</span>
+      </div>
+      <div class="win-body" id="shop-body">
+        <div class="shop-header">
+          <div class="shop-title-bar">
+            <span class="pixel-text">// AVAILABLE UNITS //</span>
+            <span class="shop-count">4 FILES FOUND</span>
+          </div>
+        </div>
+        <div class="product-grid" id="product-grid">
+          <!-- Products injected by JS -->
+        </div>
+      </div>
+      <div class="win-statusbar">
+        <span id="shop-status">4 objects | Ready</span>
+        <span>CAP.EXE v1.0</span>
+      </div>
+    </div>
+
+    <!-- CAP PLAYER WINDOW (per product) -->
+    <div class="win" id="win-player" style="top:120px; left:200px; width:520px; height:560px; display:none;">
+      <div class="win-titlebar" data-window="player">
+        <div class="win-title"><span class="win-title-icon">▶</span> CAP PLAYER v1.0</div>
+        <div class="win-controls">
+          <button class="win-btn win-min" onclick="minimizeWindow('player')">─</button>
+          <button class="win-btn win-max" onclick="maximizeWindow('player')">□</button>
+          <button class="win-btn win-close" onclick="closeWindow('player')">✕</button>
+        </div>
+      </div>
+      <div class="win-body player-body" id="player-body">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- LOOKBOOK WINDOW -->
+    <div class="win" id="win-lookbook" style="top:100px; left:150px; width:640px; height:540px; display:none;">
+      <div class="win-titlebar" data-window="lookbook">
+        <div class="win-title"><span class="win-title-icon">📸</span> LOOKBOOK.EXE — Street Archive</div>
+        <div class="win-controls">
+          <button class="win-btn win-min" onclick="minimizeWindow('lookbook')">─</button>
+          <button class="win-btn win-max" onclick="maximizeWindow('lookbook')">□</button>
+          <button class="win-btn win-close" onclick="closeWindow('lookbook')">✕</button>
+        </div>
+      </div>
+      <div class="win-menubar">
+        <span>File</span><span>View</span><span>Image</span><span>Help</span>
+      </div>
+      <div class="win-body lookbook-body">
+        <div class="lookbook-viewer">
+          <div class="lookbook-img-wrap">
+            <img id="lookbook-img" src="assets/lookbook/look1.png" alt="Lookbook">
+            <div class="lookbook-overlay">
+              <div class="lookbook-caption" id="lookbook-caption">NYC ARCHIVE / 2003</div>
+            </div>
+          </div>
+        </div>
+        <div class="lookbook-controls">
+          <button class="lk-btn" onclick="lookbookPrev()">◀ PREV</button>
+          <div class="lookbook-info">
+            <span id="lookbook-counter">1 / 3</span>
+            <span class="lookbook-label" id="lookbook-label">STREET ARCHIVE</span>
+          </div>
+          <button class="lk-btn" onclick="lookbookNext()">NEXT ▶</button>
+        </div>
+      </div>
+      <div class="win-statusbar">
+        <span>Image 1 of 3 | 100% Zoom</span><span>LOOKBOOK.EXE</span>
+      </div>
+    </div>
+
+    <!-- CUSTOM ORDER WINDOW -->
+    <div class="win" id="win-custom" style="top:140px; left:180px; width:500px; height:500px; display:none;">
+      <div class="win-titlebar" data-window="custom">
+        <div class="win-title"><span class="win-title-icon">✏️</span> CUSTOM.EXE — Order Form</div>
+        <div class="win-controls">
+          <button class="win-btn win-min" onclick="minimizeWindow('custom')">─</button>
+          <button class="win-btn win-max" onclick="maximizeWindow('custom')">□</button>
+          <button class="win-btn win-close" onclick="closeWindow('custom')">✕</button>
+        </div>
+      </div>
+      <div class="win-body" style="padding:20px; overflow-y:auto;">
+        <div class="dialog-icon-header">
+          <span style="font-size:32px;">✏️</span>
+          <div>
+            <div class="dialog-title">CUSTOM CAP REQUEST</div>
+            <div class="dialog-sub">Describe your dream drip. We build it.</div>
+          </div>
+        </div>
+        <form class="custom-form" onsubmit="submitCustomOrder(event)">
+          <div class="form-group">
+            <label class="form-label">YOUR NAME</label>
+            <input type="text" class="form-input" placeholder="Enter name..." id="cf-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">WHATSAPP / CONTACT</label>
+            <input type="text" class="form-input" placeholder="+27..." id="cf-contact">
+          </div>
+          <div class="form-group">
+            <label class="form-label">BASE CAP COLOR</label>
+            <select class="form-input" id="cf-color">
+              <option>Black</option>
+              <option>White</option>
+              <option>Navy Blue</option>
+              <option>Burgundy</option>
+              <option>Olive Green</option>
+              <option>Slate Grey</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">CUSTOMIZATION STYLE</label>
+            <select class="form-input" id="cf-style">
+              <option>Pearl Studded</option>
+              <option>Lace Applique</option>
+              <option>Rhinestone / Jewel</option>
+              <option>Chain Embellishment</option>
+              <option>Distressed + Rework</option>
+              <option>Full Custom (Describe Below)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">DESCRIBE YOUR DRIP</label>
+            <textarea class="form-input" rows="3" placeholder="Tell us exactly what you want..."
+              id="cf-desc"></textarea>
+          </div>
+          <div class="form-buttons">
+            <button type="submit" class="btn-install">▶ SUBMIT ORDER</button>
+            <button type="button" class="btn-cancel" onclick="closeWindow('custom')">CANCEL</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- CONTACT WINDOW -->
+    <div class="win" id="win-contact" style="top:130px; left:200px; width:440px; height:420px; display:none;">
+      <div class="win-titlebar" data-window="contact">
+        <div class="win-title"><span class="win-title-icon">💬</span> CONTACT.EXE — MSN Style</div>
+        <div class="win-controls">
+          <button class="win-btn win-min" onclick="minimizeWindow('contact')">─</button>
+          <button class="win-btn win-max" onclick="maximizeWindow('contact')">□</button>
+          <button class="win-btn win-close" onclick="closeWindow('contact')">✕</button>
+        </div>
+      </div>
+      <div class="win-body contact-body">
+        <div class="msn-header">
+          <div class="msn-avatar">🧢</div>
+          <div class="msn-info">
+            <div class="msn-name">CAP.EXE Support</div>
+            <div class="msn-status">● Online — Ready to drip</div>
+          </div>
+        </div>
+        <div class="msn-chat" id="msn-chat">
+          <div class="msn-msg received">
+            <span class="msg-sender">CAP.EXE:</span> yo, what's good? looking for a custom cap?
+          </div>
+          <div class="msn-msg received">
+            <span class="msg-sender">CAP.EXE:</span> hit us on WhatsApp or IG below 👇
+          </div>
+        </div>
+        <div class="contact-links">
+          <a href="https://wa.me/27000000000" target="_blank" class="contact-link whatsapp">
+            📱 WhatsApp Us
+          </a>
+          <a href="https://instagram.com/capexe" target="_blank" class="contact-link instagram">
+            📸 @capexe
+          </a>
+        </div>
+        <div class="msn-input-area">
+          <input type="text" class="msn-input" id="msn-input" placeholder="Type a message..."
+            onkeydown="sendMsnMessage(event)">
+          <button class="msn-send" onclick="sendMsnMessageBtn()">SEND</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CART WINDOW -->
+    <div class="win" id="win-cart" style="top:100px; left:120px; width:460px; height:400px; display:none;">
+      <div class="win-titlebar" data-window="cart">
+        <div class="win-title"><span class="win-title-icon">🛒</span> CART.EXE — Installation Queue</div>
+        <div class="win-controls">
+          <button class="win-btn win-min" onclick="minimizeWindow('cart')">─</button>
+          <button class="win-btn win-max" onclick="maximizeWindow('cart')">□</button>
+          <button class="win-btn win-close" onclick="closeWindow('cart')">✕</button>
+        </div>
+      </div>
+      <div class="win-body" style="padding:20px; overflow-y:auto;">
+        <div class="cart-header">INSTALLATION QUEUE</div>
+        <div id="cart-items" class="cart-items">
+          <div class="cart-empty" id="cart-empty">No items queued.<br><span class="cart-empty-sub">Visit SHOP.EXE to add
+              drip.</span></div>
+        </div>
+        <div class="cart-footer" id="cart-footer" style="display:none;">
+          <div class="cart-total">TOTAL: <span id="cart-total-price">R0</span></div>
+          <button class="btn-install" onclick="checkout()">▶ CHECKOUT / INSTALL DRIP</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STORY WINDOW -->
+    <div class="win" id="win-story" style="top:80px; left:140px; width:560px; height:540px; display:none;">
+      <div class="win-titlebar" data-window="story">
+        <div class="win-title"><span class="win-title-icon">📖</span> STORY.EXE — Brand Archive</div>
+        <div class="win-controls">
+          <button class="win-btn win-min" onclick="minimizeWindow('story')">─</button>
+          <button class="win-btn win-max" onclick="maximizeWindow('story')">□</button>
+          <button class="win-btn win-close" onclick="closeWindow('story')">✕</button>
+        </div>
+      </div>
+      <div class="win-menubar">
+        <span>File</span><span>Edit</span><span>View</span><span>Help</span>
+      </div>
+      <div class="win-body story-body">
+        <div class="story-header">
+          <div class="story-logo">CAP<span>.EXE</span></div>
+          <div class="story-est">STREETWEAR ARCHIVE // EST. 2003</div>
+        </div>
+        <div class="story-content">
+          <div class="story-section">
+            <div class="story-label">// ORIGIN FILE</div>
+            <p class="story-text">It started in a basement in 2003. No label. No backing. Just a kid with a fitted cap,
+              a bag of pearls, and a needle.</p>
+            <p class="story-text">He didn't call it fashion. He called it a file. Every cap was a program — hand-built,
+              one of one, released into the streets like software into the internet.</p>
+          </div>
+          <div class="story-section">
+            <div class="story-label">// THE NAME</div>
+            <p class="story-text">CAP.EXE was named after the way he thought about his work. Not a product. An
+              executable. You wear it — it runs. It changes how people see you. You become the program.</p>
+            <p class="story-text">The early internet had this energy — anything was possible if you knew where to look.
+              The underground forums. The limited drops. The culture that lived between the pixels.</p>
+            <p class="story-text">That's what CAP.EXE is. A digital archive of a physical era that most people forgot.
+            </p>
+          </div>
+          <div class="story-section">
+            <div class="story-label">// THE PROTOCOL</div>
+            <p class="story-text">Every cap is built by hand. Every piece ships with a patch number — <span
+                class="story-highlight">1/25, 1/10, 1/8</span> — because nothing here is mass produced. When it's gone,
+              it's gone. The file closes.</p>
+            <p class="story-text">Pearl studs. Lace. Rosary chains. Gold jewels. These aren't decorations. They're
+              commits. Each one is a decision that can't be undone.</p>
+          </div>
+          <div class="story-section">
+            <div class="story-label">// THE MISSION</div>
+            <p class="story-text">Not a hat. A file.<br>Not a brand. An archive.<br>Not streetwear. A protocol.</p>
+            <p class="story-text">CAP.EXE exists to prove that the most powerful thing you can wear is something that
+              could only have been made once.</p>
+            <div class="story-signature">— CAP.EXE // DOWNLOAD THE DRIP</div>
+          </div>
+        </div>
+      </div>
+      <div class="win-statusbar">
+        <span>story.exe loaded | Read time: ~2 min</span><span>CAP.EXE Archive</span>
+      </div>
+    </div>
+
+    <!-- GAME WINDOW -->
+    <div class="win" id="win-game" style="top:60px; left:120px; width:500px; height:560px; display:none;">
+      <div class="win-titlebar" data-window="game">
+        <div class="win-title"><span class="win-title-icon">🎮</span> GAME.EXE — Cap Catcher v1.0</div>
+        <div class="win-controls">
+          <button class="win-btn win-min" onclick="minimizeWindow('game')">─</button>
+          <button class="win-btn win-max" onclick="maximizeWindow('game')">□</button>
+          <button class="win-btn win-close" onclick="closeWindow('game'); stopGame()">✕</button>
+        </div>
+      </div>
+      <div class="win-menubar">
+        <span onclick="startGame()">New Game</span><span>Help</span>
+      </div>
+      <div class="win-body game-body">
+        <div class="game-hud">
+          <div class="game-hud-item">SCORE: <span id="game-score">0</span></div>
+          <div class="game-hud-item">LIVES: <span id="game-lives">❤️❤️❤️</span></div>
+          <div class="game-hud-item">LEVEL: <span id="game-level">1</span></div>
+        </div>
+        <canvas id="game-canvas" width="480" height="380"></canvas>
+        <div class="game-controls">
+          <button class="btn-install" onclick="startGame()" id="game-start-btn">▶ START GAME</button>
+          <div class="game-hint">← → ARROW KEYS or A/D to move</div>
+        </div>
+      </div>
+      <div class="win-statusbar">
+        <span id="game-status">Press START to play</span><span>GAME.EXE v1.0</span>
+      </div>
+    </div>
+
+    <!-- SECRET DRIP MODE WINDOW -->
+    <div class="win secret-win" id="win-secret" style="top:100px; left:100px; width:580px; height:400px; display:none;">
+      <div class="win-titlebar secret-titlebar" data-window="secret">
+        <div class="win-title">🔓 SECRET DRIP MODE — CLASSIFIED</div>
+        <div class="win-controls">
+          <button class="win-btn win-close" onclick="closeWindow('secret')">✕</button>
+        </div>
+      </div>
+      <div class="win-body secret-body" id="secret-body">
+        <div class="secret-header">
+          <div class="secret-badge">⚠ ACCESS GRANTED ⚠</div>
+          <div class="secret-title">SECRET DRIP MODE UNLOCKED</div>
+          <div class="secret-sub">You found the hidden archive.<br>These files were never meant to be public.</div>
+        </div>
+        <div class="secret-caps" id="secret-caps">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ERROR POPUP TEMPLATE (cloned by JS) -->
+    <div class="error-popup" id="error-popup-tpl" style="display:none;">
+      <div class="error-titlebar">
+        <div class="error-title">⚠ SYSTEM WARNING</div>
+        <button class="win-btn win-close" onclick="dismissError(this)">✕</button>
+      </div>
+      <div class="error-body">
+        <div class="error-icon">⚠️</div>
+        <div class="error-message-text" id="error-msg-tpl"></div>
+      </div>
+      <div class="error-footer">
+        <button class="btn-install" onclick="dismissError(this)">OK</button>
+        <button class="btn-cancel" onclick="dismissError(this)">Ignore</button>
+      </div>
+    </div>
+
+    <!-- ====== TASKBAR ====== -->
+    <div id="taskbar">
+      <button id="start-btn" onclick="toggleStartMenu()">
+        <span class="start-logo">⊞</span> START
+      </button>
+      <div id="taskbar-windows">
+        <!-- Active windows injected here -->
+      </div>
+      <div id="taskbar-tray">
+        <div class="tray-icon" title="Drip Level">🔊</div>
+        <div class="tray-icon" title="Network">📶</div>
+        <div id="taskbar-clock"></div>
+      </div>
+      <div id="kaynid-credit" title="Site by kaynid">site by <span>kaynid</span></div>
+    </div>
+
+    <!-- START MENU -->
+    <div id="start-menu" class="hidden">
+      <div class="start-sidebar">
+        <div class="start-brand">CAP<span>.EXE</span></div>
+        <div class="start-sub">EST. 2003</div>
+      </div>
+      <div class="start-links">
+        <div class="start-link" onclick="openWindow('shop'); toggleStartMenu()">
+          <span>🧢</span> SHOP.EXE
+        </div>
+        <div class="start-link" onclick="openWindow('lookbook'); toggleStartMenu()">
+          <span>📸</span> LOOKBOOK.EXE
+        </div>
+        <div class="start-link" onclick="openWindow('custom'); toggleStartMenu()">
+          <span>✏️</span> CUSTOM ORDER
+        </div>
+        <div class="start-link" onclick="openWindow('cart'); toggleStartMenu()">
+          <span>🛒</span> CART.EXE
+        </div>
+        <div class="start-link" onclick="openWindow('contact'); toggleStartMenu()">
+          <span>💬</span> CONTACT.EXE
+        </div>
+        <div class="start-link" onclick="openWindow('story'); toggleStartMenu()">
+          <span>📖</span> STORY.EXE
+        </div>
+        <div class="start-link" onclick="openWindow('game'); toggleStartMenu()">
+          <span>🎮</span> GAME.EXE
+        </div>
+        <div class="start-divider"></div>
+        <div class="start-link hint-link">
+          <span>🔑</span> <span class="hint-text">CTRL+D = SECRET MODE</span>
+        </div>
+        <div class="start-link hint-link">
+          <span>🕹️</span> <span class="hint-text">↑↑↓↓←→←→ = ???</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /desktop -->
+
+  <script src="app.js"></script>
+</body>
+
+</html>
