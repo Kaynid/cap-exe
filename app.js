@@ -169,9 +169,17 @@ function initDesktop() {
   initClock();
   renderProducts();
   renderSecretCaps();
-  initCursorFX();
+  // Only init cursor FX on non-touch devices
+  if (!('ontouchstart' in window)) {
+    initCursorFX();
+  }
   scheduleErrorPopups();
   openWindow('shop'); // Open shop by default
+
+  // Add touch-action to icons so tap is instant
+  document.querySelectorAll('.desktop-icon').forEach(icon => {
+    icon.style.touchAction = 'manipulation';
+  });
 }
 
 // ================================================
@@ -397,6 +405,19 @@ function openWindow(id) {
   const el = document.getElementById(WINDOW_IDS[id]);
   if (!el) return;
 
+  // On mobile: close all other open windows first (full-screen stack)
+  const isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    state.openWindows.forEach(openId => {
+      if (openId !== id) {
+        const other = document.getElementById(WINDOW_IDS[openId]);
+        if (other) other.style.display = 'none';
+      }
+    });
+    state.openWindows.clear();
+    state.minimizedWindows.clear();
+  }
+
   playWindowOpen();
   el.style.display = 'flex';
   el.style.flexDirection = 'column';
@@ -479,6 +500,7 @@ function makeDraggable(win) {
   let isDragging = false;
   let offsetX = 0, offsetY = 0;
 
+  // Mouse drag
   titlebar.addEventListener('mousedown', (e) => {
     if (e.target.classList.contains('win-btn')) return;
     isDragging = true;
@@ -500,6 +522,34 @@ function makeDraggable(win) {
   });
 
   document.addEventListener('mouseup', () => { isDragging = false; });
+
+  // Touch drag (mobile — windows are fullscreen so just bring to front on touch)
+  titlebar.addEventListener('touchstart', (e) => {
+    if (e.target.classList.contains('win-btn')) return;
+    bringToFront(win);
+    // Don't attempt to drag on mobile — windows are full-screen
+    if (window.innerWidth >= 768) {
+      const touch = e.touches[0];
+      isDragging = true;
+      offsetX = touch.clientX - win.getBoundingClientRect().left;
+      offsetY = touch.clientY - win.getBoundingClientRect().top;
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  titlebar.addEventListener('touchmove', (e) => {
+    if (!isDragging || window.innerWidth < 768) return;
+    const touch = e.touches[0];
+    let x = touch.clientX - offsetX;
+    let y = touch.clientY - offsetY;
+    x = Math.max(0, Math.min(x, window.innerWidth - win.offsetWidth));
+    y = Math.max(0, Math.min(y, window.innerHeight - 38 - win.offsetHeight));
+    win.style.left = x + 'px';
+    win.style.top = y + 'px';
+    e.preventDefault();
+  }, { passive: false });
+
+  titlebar.addEventListener('touchend', () => { isDragging = false; });
 }
 
 // Bind all existing windows
@@ -924,11 +974,36 @@ function startGame() {
   gameState._keydown = keydown;
   gameState._keyup = keyup;
 
-  // Mouse/touch control for basket
+  // Mouse/touch control for basket position (desktop)
   canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
     gameState.basket.target = e.clientX - rect.left - gameState.basket.w / 2;
   });
+
+  // Touch move on canvas (swipe to aim basket)
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    // Scale touch X from screen coords to canvas coords
+    const scaleX = canvas.width / rect.width;
+    gameState.basket.target = (touch.clientX - rect.left) * scaleX - gameState.basket.w / 2;
+  }, { passive: false });
+
+  // On-screen touch buttons (mobile)
+  const btnLeft = document.getElementById('game-btn-left');
+  const btnRight = document.getElementById('game-btn-right');
+  if (btnLeft && btnRight) {
+    const setKey = (key, val) => { if (gameState) gameState.keys[key] = val; };
+    btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); setKey('ArrowLeft', true); }, { passive: false });
+    btnLeft.addEventListener('touchend', () => setKey('ArrowLeft', false));
+    btnLeft.addEventListener('mousedown', () => setKey('ArrowLeft', true));
+    btnLeft.addEventListener('mouseup', () => setKey('ArrowLeft', false));
+    btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); setKey('ArrowRight', true); }, { passive: false });
+    btnRight.addEventListener('touchend', () => setKey('ArrowRight', false));
+    btnRight.addEventListener('mousedown', () => setKey('ArrowRight', true));
+    btnRight.addEventListener('mouseup', () => setKey('ArrowRight', false));
+  }
 
   function spawnCap() {
     const isBomb = Math.random() < 0.18 + gameState.level * 0.02;

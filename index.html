@@ -4,6 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000410">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>CAP.EXE — Download The Drip</title>
   <meta name="description"
     content="CAP.EXE — Custom streetwear caps from the forgotten internet era. Not a hat. A file. EST. 2003.">
@@ -369,6 +373,10 @@
           <div class="game-hud-item">LEVEL: <span id="game-level">1</span></div>
         </div>
         <canvas id="game-canvas" width="480" height="380"></canvas>
+        <div id="game-touch-controls">
+          <button class="game-touch-btn" id="game-btn-left">◀</button>
+          <button class="game-touch-btn" id="game-btn-right">▶</button>
+        </div>
         <div class="game-controls">
           <button class="btn-install" onclick="startGame()" id="game-start-btn">▶ START GAME</button>
           <div class="game-hint">← → ARROW KEYS or A/D to move</div>
